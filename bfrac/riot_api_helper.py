@@ -81,7 +81,7 @@ class RiotAPIHelper:
         if in_type:
             params["type"] = in_type
         if in_queue is not None:
-            params["queue"] = in_type
+            params["queue"] = in_queue
         if in_start_time > 0:
             params["startTime"] = in_start_time
         if in_end_time > 0:
