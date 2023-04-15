@@ -2,9 +2,12 @@ class RiotAPIHelper:
     """
     Helper class containing static methods for calling common riot api endpoints.
     """
-    lol_servers = ["br1", "eun1", "euw1", "jp1", "kr", "la1", "la2", "na1", "oc1", "ph2", "ru", "sg2", "th2", "tr1",
+    LOL_SERVERS = ["br1", "eun1", "euw1", "jp1", "kr", "la1", "la2", "na1", "oc1", "ph2", "ru", "sg2", "th2", "tr1",
                    "tw2", "vn2"]
-    lol_continents = ["americas", "asia", "europe", "sea"]
+    LOL_CONTINENTS = ["americas", "asia", "europe", "sea"]
+    LOL_SERVER_TO_CONTINENT = {"br1": "americas", "eun1": "europe", "euw1": "europe", "jp1": "asia", "kr": "asia",
+                               "la1": "americas", "la2": "americas", "na1": "americas", "oc1": "sea", "ph2": "sea",
+                               "ru": "europe", "sg2": "sea", "th2": "sea", "tr1": "europe", "tw2": "sea", "vn2": "sea"}
 
     """
     The AMERICAS routing value serves NA, BR, LAN and LAS.
@@ -34,8 +37,8 @@ class RiotAPIHelper:
         return f"https://{in_region_continent}.api.riotgames.com/lol/match/v5/matches/{in_match_id}/timeline"
 
     @staticmethod
-    def get_summoner_by_name(in_riot_api_caller, in_region, in_summoner_name):
-        url = RiotAPIHelper.url_summoner_by_name(in_region, in_summoner_name)
+    def get_summoner_by_name(in_riot_api_caller, in_region_server, in_summoner_name):
+        url = RiotAPIHelper.url_summoner_by_name(in_region_server, in_summoner_name)
         return in_riot_api_caller.call_riot_api(url, {})
 
     @staticmethod
