@@ -1,3 +1,7 @@
+from typing import Literal
+from bfrac.bfrac import RiotAPICaller
+
+
 class RiotAPIHelper:
     """
     Helper class containing static methods for calling common riot api endpoints.
@@ -17,38 +21,60 @@ class RiotAPIHelper:
     """
 
     @staticmethod
-    def url_summoner_by_name(in_region_server, in_summoner_name):
+    def url_summoner_by_name(in_region_server: Literal["br1", "eun1", "euw1", "jp1", "kr", "la1", "la2", "na1", "oc1",
+                                                       "ph2", "ru", "sg2", "th2", "tr1", "tw2", "vn2"],
+                             in_summoner_name: str):
         return f"https://{in_region_server}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{in_summoner_name}"
 
     @staticmethod
-    def url_summoner_by_puuid(in_region_server, in_encrypted_puuid):
+    def url_summoner_by_puuid(in_region_server: Literal["br1", "eun1", "euw1", "jp1", "kr", "la1", "la2", "na1", "oc1",
+                                                        "ph2", "ru", "sg2", "th2", "tr1", "tw2", "vn2"],
+                              in_encrypted_puuid: str):
         return f"https://{in_region_server}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{in_encrypted_puuid}"
 
     @staticmethod
-    def url_match_list_by_summoner_puuid(in_region_continent, in_puuid):
+    def url_match_list_by_summoner_puuid(in_region_continent: Literal["americas", "asia", "europe", "sea"], in_puuid):
         return f"https://{in_region_continent}.api.riotgames.com/lol/match/v5/matches/by-puuid/{in_puuid}/ids"
 
     @staticmethod
-    def url_match_info(in_region_continent, in_match_id):
+    def url_match_info(in_region_continent: Literal["americas", "asia", "europe", "sea"], in_match_id):
         return f"https://{in_region_continent}.api.riotgames.com/lol/match/v5/matches/{in_match_id}"
 
     @staticmethod
-    def url_match_timeline(in_region_continent, in_match_id):
+    def url_match_timeline(in_region_continent: Literal["americas", "asia", "europe", "sea"], in_match_id):
         return f"https://{in_region_continent}.api.riotgames.com/lol/match/v5/matches/{in_match_id}/timeline"
 
     @staticmethod
-    def get_summoner_by_name(in_riot_api_caller, in_region_server, in_summoner_name):
+    def get_summoner_by_name(in_riot_api_caller: RiotAPICaller,
+                             in_region_server: Literal["br1", "eun1", "euw1", "jp1", "kr", "la1", "la2", "na1", "oc1",
+                                                       "ph2", "ru", "sg2", "th2", "tr1", "tw2", "vn2"],
+                             in_summoner_name: str) -> dict:
         url = RiotAPIHelper.url_summoner_by_name(in_region_server, in_summoner_name)
         return in_riot_api_caller.call_riot_api(url, {})
 
     @staticmethod
-    def get_matches_list(in_riot_api_caller, in_region_continent, in_summoner_puuid, in_count,
-                         in_type="", in_queue=None, in_start_time=0, in_end_time=0, in_start=0):
+    def get_summoner_by_puuid(in_riot_api_caller: RiotAPICaller,
+                              in_region_server: Literal["br1", "eun1", "euw1", "jp1", "kr", "la1", "la2", "na1", "oc1",
+                                                        "ph2", "ru", "sg2", "th2", "tr1", "tw2", "vn2"],
+                              in_encrypted_puuid: str) -> dict:
+        url = RiotAPIHelper.url_summoner_by_puuid(in_region_server, in_encrypted_puuid)
+        return in_riot_api_caller.call_riot_api(url, {})
+
+    @staticmethod
+    def get_matches_list(in_riot_api_caller: RiotAPICaller,
+                         in_region_continent: Literal["americas", "asia", "europe", "sea"],
+                         in_summoner_puuid: str,
+                         in_count: int,
+                         in_type: Literal["ranked", "normal", "tourney", "tutorial"] = "",
+                         in_queue: int = None,
+                         in_start_time: int = 0,
+                         in_end_time: int = 0,
+                         in_start: int = 0):
         """
 
         Parameters
         ----------
-        in_riot_api_caller : RiotAPICaller
+        in_riot_api_caller
             A valid RiotAPICaller object that could be used to call the endpoint.
         in_region_continent : str
             One of region values from {"americas", "asia", "europe", "sea"}
@@ -92,11 +118,15 @@ class RiotAPIHelper:
         return in_riot_api_caller.call_riot_api(url, params)
 
     @staticmethod
-    def get_match_info(in_riot_api_caller, in_region_continent, in_match_id):
+    def get_match_info(in_riot_api_caller: RiotAPICaller,
+                       in_region_continent: Literal["americas", "asia", "europe", "sea"],
+                       in_match_id: str):
         url = RiotAPIHelper.url_match_info(in_region_continent, in_match_id)
         return in_riot_api_caller.call_riot_api(url, {})
 
     @staticmethod
-    def get_match_timeline(in_riot_api_caller, in_region_continent, in_match_id):
+    def get_match_timeline(in_riot_api_caller: RiotAPICaller,
+                           in_region_continent: Literal["americas", "asia", "europe", "sea"],
+                           in_match_id: str):
         url = RiotAPIHelper.url_match_timeline(in_region_continent, in_match_id)
         return in_riot_api_caller.call_riot_api(url, {})
