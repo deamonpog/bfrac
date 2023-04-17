@@ -21,7 +21,7 @@ class RequestError(Exception):
         super().__init__(msg)
 
 
-class BadRequest(RequestError):
+class BadRequest(Exception):
     """
     BadRequest is an Exception
     Raised when the RiotAPI sends error code 400
@@ -39,7 +39,7 @@ class BadRequest(RequestError):
         super().__init__(msg + info)
 
 
-class Unauthorized(RequestError):
+class Unauthorized(Exception):
     """
     Unauthorized is an Exception
     Raised when the RiotAPI sends error code 401
@@ -55,7 +55,7 @@ class Unauthorized(RequestError):
         super().__init__(msg + info)
 
 
-class Forbidden(RequestError):
+class Forbidden(Exception):
     """
     Forbidden is an Exception
     Raised when the RiotAPI sends error code 403
@@ -73,7 +73,7 @@ class Forbidden(RequestError):
         super().__init__(msg + info)
 
 
-class NotFound(RequestError):
+class NotFound(Exception):
     """
     NotFound is an Exception
     Raised when the RiotAPI sends error code 404
@@ -91,7 +91,7 @@ class NotFound(RequestError):
         super().__init__(msg + info)
 
 
-class UnsupportedMediaType(RequestError):
+class UnsupportedMediaType(Exception):
     """
     UnsupportedMediaType is an Exception
     Raised when the RiotAPI sends error code 415
@@ -107,7 +107,7 @@ class UnsupportedMediaType(RequestError):
         super().__init__(msg + info)
 
 
-class RateLimitExceeded(RequestError):
+class RateLimitExceeded(Exception):
     """
     RateLimitExceeded is an Exception
     Raised when the RiotAPI sends error code 429
