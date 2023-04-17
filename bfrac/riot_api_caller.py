@@ -21,6 +21,107 @@ class RequestError(Exception):
         super().__init__(msg)
 
 
+class BadRequest(Exception):
+    """
+    BadRequest is an Exception
+    Raised when the RiotAPI sends error code 400
+    """
+
+    def __init__(self, in_status_code, in_text):
+        self.status_code = in_status_code
+        self.text = in_text
+        msg = f"Request returned a error code 400 (Bad Request) -> {in_text}.\n"
+        info = "Possible syntax Error in the request.\n" \
+            "Common Reasons:\n" \
+            "\t A provided parameter is in the wrong format (e.g., a string instead of an integer).\n" \
+            "\t A provided parameter is invalid (e.g., beginTime and startTime specify a time range that is too large).\n" \
+            "\t A required parameter was not provided.\n"
+        super().__init__(msg + info)
+
+
+class Unauthorized(Exception):
+    """
+    Unauthorized is an Exception
+    Raised when the RiotAPI sends error code 401
+    """
+
+    def __init__(self, in_status_code, in_text):
+        self.status_code = in_status_code
+        self.text = in_text
+        msg = f"Request returned a error code 401 (Unauthorized) -> {in_text}.\n"
+        info = "Authentication error.\n" \
+            "Common Reasons:\n" \
+            "\t An API key has not been included in the request.\n"
+        super().__init__(msg + info)
+
+
+class Forbidden(Exception):
+    """
+    Forbidden is an Exception
+    Raised when the RiotAPI sends error code 403
+    """
+
+    def __init__(self, in_status_code, in_text):
+        self.status_code = in_status_code
+        self.text = in_text
+        msg = f"Request returned a error code 403 (Forbidden) -> {in_text}.\n"
+        info = "Server understood the request but refuses to authorize it.\n" \
+            "Common Reasons:\n" \
+            "\t An invalid API key was provided with the API request.\n" \
+            "\t A blacklisted API key was provided with the API request.\n" \
+            "\t The API request was for an incorrect or unsupported path.\n"
+        super().__init__(msg + info)
+
+
+class NotFound(Exception):
+    """
+    NotFound is an Exception
+    Raised when the RiotAPI sends error code 404
+    """
+
+    def __init__(self, in_status_code, in_text):
+        self.status_code = in_status_code
+        self.text = in_text
+        msg = f"Request returned a error code 404 (Not Found) -> {in_text}.\n"
+        info = "Server has not found a match for the API request being made.\n" \
+            "Common Reasons:\n" \
+            "\t The ID or name provided does not match any existing resource " \
+               "(e.g., there is no Summoner matching the specified ID).\n" \
+            "\t There are no resources that match the parameters specified.\n"
+        super().__init__(msg + info)
+
+
+class UnsupportedMediaType(Exception):
+    """
+    UnsupportedMediaType is an Exception
+    Raised when the RiotAPI sends error code 415
+    """
+
+    def __init__(self, in_status_code, in_text):
+        self.status_code = in_status_code
+        self.text = in_text
+        msg = f"Request returned a error code 415 (Unsupported Media Type) -> {in_text}.\n"
+        info = "Server is refusing to service the request because the body of the request is in a format that is not supported.\n" \
+            "Common Reasons:\n" \
+            "\t The Content-Type header was not appropriately set.\n"
+        super().__init__(msg + info)
+
+
+class RateLimitExceeded(Exception):
+    """
+    RateLimitExceeded is an Exception
+    Raised when the RiotAPI sends error code 429
+    """
+
+    def __init__(self, in_status_code, in_text):
+        self.status_code = in_status_code
+        self.text = in_text
+        msg = f"Request returned a error code 429 (Rate Limit Exceeded) -> {in_text}.\n"
+        info = "Application has exhausted its maximum number of allotted API calls allowed for a given duration.\n" \
+            "Check the Retry-After header for number of seconds to wait.\n"
+        super().__init__(msg + info)
+
+
 class RiotAPICaller:
     """
     RiotAPICaller is the main class of this package.
@@ -102,7 +203,20 @@ class RiotAPICaller:
         if response.status_code != 200:
             print(response)
             print(response.json())
-            raise RequestError(response.status_code, response.text)
+            if response.status_code == 400:
+                raise BadRequest(response.status_code, response.text)
+            elif response.status_code == 401:
+                raise Unauthorized(response.status_code, response.text)
+            elif response.status_code == 403:
+                raise Forbidden(response.status_code, response.text)
+            elif response.status_code == 404:
+                raise NotFound(response.status_code, response.text)
+            elif response.status_code == 415:
+                raise UnsupportedMediaType(response.status_code, response.text)
+            elif response.status_code == 429:
+                raise UnsupportedMediaType(response.status_code, response.text)
+            else:
+                raise RequestError(response.status_code, response.text)
         return response.json()
 
     def _wait_rate_limit(self):
