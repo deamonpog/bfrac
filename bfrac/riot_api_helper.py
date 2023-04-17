@@ -1,5 +1,5 @@
 from typing import Literal
-from bfrac.bfrac import RiotAPICaller
+from .riot_api_caller import RiotAPICaller
 
 
 class RiotAPIHelper:
