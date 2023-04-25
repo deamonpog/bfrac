@@ -165,7 +165,7 @@ class QueryContext:
 
     def get_match_info(self, in_match_id: str) -> dict:
         """
-        Retrieves match_info structure from the RiotAPI for the given match.
+        Retrieves MatchDto structure from the RiotAPI for the given match.
         Returned dictionary contains summary information about the match.
         (Uses one RiotAPI call)
 
@@ -177,7 +177,26 @@ class QueryContext:
 
         Returns
         -------
-            JSON like data structure containing match_info
+            JSON like data structure containing MatchDto
         """
         match_info = RiotAPIHelper.get_match_info(self.riot_api_caller, self.region_continent, in_match_id)
         return match_info
+
+    def get_match_timeline(self, in_match_id: str) -> dict:
+        """
+        Retrieves MatchTimelineDto structure from the RiotAPI for the given match.
+        Returned dictionary contains timeline information about the match.
+        (Uses one RiotAPI call)
+
+        Parameters
+        ----------
+        in_match_id
+            MatchID which usually has the form "{server}_{gameId}"
+            E.g. "NA_123456789"
+
+        Returns
+        -------
+            JSON like data structure containing MatchTimelineDto
+        """
+        match_timeline = RiotAPIHelper.get_match_timeline(self.riot_api_caller, self.region_continent, in_match_id)
+        return match_timeline
